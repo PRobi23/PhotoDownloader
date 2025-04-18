@@ -1,3 +1,5 @@
+import java.util.Properties
+
 plugins {
     alias(libs.plugins.android.application)
     alias(libs.plugins.kotlin.android)
@@ -20,7 +22,14 @@ android {
 
         testInstrumentationRunner = "androidx.test.runner.AndroidJUnitRunner"
     }
-
+    val localProperties = Properties().apply {
+        val localFile = rootProject.file("local.properties")
+        if (localFile.exists()) {
+            load(localFile.inputStream())
+        }
+    }
+    val apiKey = localProperties["API_KEY"]?.toString()
+        ?: throw GradleException("API_KEY not found in local.properties")
     buildTypes {
         release {
             isMinifyEnabled = false
@@ -28,6 +37,18 @@ android {
                 getDefaultProguardFile("proguard-android-optimize.txt"),
                 "proguard-rules.pro"
             )
+            buildConfigField(
+                "String",
+                "API_KEY",
+                apiKey
+            ) // HERE NORMALLY WE WOULD HAVE A RELEASE API KEY
+        }
+        debug {
+            buildConfigField(
+                "String",
+                "API_KEY",
+                apiKey
+            ) // HERE NORMALLY WE WOULD HAVE A DEBUG API KEY
         }
     }
     compileOptions {
@@ -39,6 +60,7 @@ android {
     }
     buildFeatures {
         compose = true
+        buildConfig = true
     }
 }
 
@@ -55,6 +77,10 @@ dependencies {
     implementation(libs.bundles.ktor.android)
     implementation(libs.hilt.android)
     implementation(libs.kotlinx.coroutines.core)
+    implementation(libs.androidx.compose.navigation)
+    implementation(libs.hilt.navigation.compose)
+    implementation(libs.coil.compose)
+    implementation(libs.coil.network)
     kapt(libs.hilt.compiler)
     debugImplementation(libs.chucker.library)
     releaseImplementation(libs.chucker.library.no.op)
@@ -63,6 +89,7 @@ dependencies {
     testImplementation(libs.ktor.client.mock)
     testImplementation(libs.kotlinx.coroutines.test)
     testImplementation(libs.truth)
+    testImplementation(libs.mockk)
 
     androidTestImplementation(libs.androidx.junit)
     androidTestImplementation(libs.androidx.espresso.core)

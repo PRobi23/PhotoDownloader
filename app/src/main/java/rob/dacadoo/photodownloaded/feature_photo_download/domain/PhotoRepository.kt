@@ -3,6 +3,7 @@ package rob.dacadoo.photodownloaded.feature_photo_download.domain
 import rob.dacadoo.photodownloaded.core.domain.util.DataError
 import rob.dacadoo.photodownloaded.core.domain.util.Result
 import rob.dacadoo.photodownloaded.feature_photo_download.data.model.PhotoResponse
+import rob.dacadoo.photodownloaded.feature_photo_download.domain.model.Photo
 
 /**
  * Repository interface responsible for fetching photos.
@@ -17,5 +18,5 @@ interface PhotoRepository {
      * @see PhotoResponse if the api call succeeds
      * @see DataError.Network if the api call fails
      */
-    suspend fun getPhotosByName(name: String): Result<PhotoResponse, DataError.Network>
+    suspend fun getPhotosByName(name: String): Result<List<Photo>, DataError.Network>
 }

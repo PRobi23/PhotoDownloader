@@ -25,6 +25,26 @@ sealed interface Result<out D, out E : Error> {
 }
 
 /**
+ * Transforms the successful result of a [Result] using the given [map] function,
+ * while leaving the error unchanged.
+ *
+ * This function is useful for converting the success data from one type to another
+ * (e.g., mapping a data model to a domain model), without modifying the error path.
+ *
+ * @param map A function that takes the success value [T] and returns a new value of type [R].
+ * @return A [Result.Success] with the transformed value of type [R],
+ *         or a [Result.Error] if the original result was an error.
+ *
+ * @receiver A [Result] that contains either a value of type [T] or an error of type [E].
+ */
+inline fun <T, E: Error, R> Result<T, E>.map(map: (T) -> R): Result<R, E> {
+    return when(this) {
+        is Result.Error -> Result.Error(error)
+        is Result.Success -> Result.Success(map(data))
+    }
+}
+
+/**
  * Applies one of two functions to the contained value based on whether it is a [Result.Success] or [Result.Error].
  *
  * This extension function allows processing a [Result] by providing:

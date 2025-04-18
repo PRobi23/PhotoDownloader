@@ -13,3 +13,9 @@
 .externalNativeBuild
 .cxx
 local.properties
+*/build/generated/
+*/build/intermediates/
+*/build/android-profile/
+*/build/kotlin-build/
+# Since Kotlin 2.0.0, folder named ".kotlin" is created at compile time
+.kotlin

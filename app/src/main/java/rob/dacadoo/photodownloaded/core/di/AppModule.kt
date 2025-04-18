@@ -1,4 +1,4 @@
-package rob.dacadoo.photodownloaded.feature_photo_download.di
+package rob.dacadoo.photodownloaded.core.di
 
 import dagger.Module
 import dagger.Provides

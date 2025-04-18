@@ -1,3 +1,16 @@
 <resources>
     <string name="app_name">PhotoDownloaded</string>
+    <string name="search_button">Search</string>
+    <string name="empty_photos_list">No photos founded with the given name…</string>
+
+    <string name="error_request_timeout">The request timed out. Please try again.</string>
+    <string name="error_unauthorized">You are not authorized. Please log in again.</string>
+    <string name="error_conflict">A conflict occurred. Please try again later.</string>
+    <string name="error_too_many_requests">Too many requests. Please wait a moment and try again.</string>
+    <string name="error_no_internet">No internet connection. Please check your network and try again.</string>
+    <string name="error_payload_too_large">The request is too large. Please reduce the size and try again.</string>
+    <string name="error_server_error">A server error occurred. Please try again later.</string>
+    <string name="error_serialization">We encountered a data error. Please update the app or try again.</string>
+    <string name="error_unknown">An unknown error occurred. Please try again.</string>
+
 </resources>

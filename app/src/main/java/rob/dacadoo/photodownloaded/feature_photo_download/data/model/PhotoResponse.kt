@@ -2,6 +2,7 @@ package rob.dacadoo.photodownloaded.feature_photo_download.data.model
 
 import kotlinx.serialization.SerialName
 import kotlinx.serialization.Serializable
+import rob.dacadoo.photodownloaded.feature_photo_download.domain.model.Photo
 
 @Serializable
 data class PhotoResponse(
@@ -113,7 +114,7 @@ data class ProfileImage(
 @Serializable
 data class TopicSubmission(
     val status: String,
-    @SerialName("approved_on") val approvedOn: String
+    @SerialName("approved_on") val approvedOn: String? = null
 )
 
 @Serializable
@@ -123,3 +124,9 @@ data class Social(
     @SerialName("twitter_username") val twitterUsername: String? = null,
     @SerialName("paypal_email") val paypalEmail: String? = null
 )
+
+fun PhotoResponse.toDomainPhotos(): List<Photo> {
+    return results.map {
+        Photo(it.urls.thumb)
+    }
+}
