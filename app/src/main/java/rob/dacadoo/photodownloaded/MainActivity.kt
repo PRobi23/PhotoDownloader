@@ -22,19 +22,10 @@ class MainActivity : ComponentActivity() {
         enableEdgeToEdge()
         setContent {
             PhotoDownloadedTheme {
-                Scaffold { contentPadding ->
-                    Surface(
-                        modifier = Modifier
-                            .fillMaxSize()
-                            .padding(contentPadding),
-                        color = MaterialTheme.colorScheme.background
-                    ) {
-                        val navController = rememberNavController()
-                        NavigationRoot(
-                            navController = navController
-                        )
-                    }
-                }
+                val navController = rememberNavController()
+                NavigationRoot(
+                    navController = navController
+                )
             }
         }
     }

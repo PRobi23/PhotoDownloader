@@ -14,6 +14,7 @@ import androidx.compose.foundation.text.input.rememberTextFieldState
 import androidx.compose.material3.Button
 import androidx.compose.material3.CircularProgressIndicator
 import androidx.compose.material3.Scaffold
+import androidx.compose.material3.SnackbarHost
 import androidx.compose.material3.SnackbarHostState
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
@@ -50,13 +51,16 @@ fun MainScreenRoot(
             mainViewModel.handleIntent(MainViewModelIntent.SetUiEventState(uiEvent))
         },
     )
-
-    MainScreen(
-        modifier = modifier,
-        uiState = uiState,
-        handleIntent = mainViewModel::handleIntent,
-        navigateToDetailsScreen = navigateToDetailsScreen
-    )
+    Scaffold(
+        snackbarHost = { SnackbarHost(snackbarHostState) },
+    ) { contentPadding ->
+        MainScreen(
+            modifier = modifier.padding(contentPadding),
+            uiState = uiState,
+            handleIntent = mainViewModel::handleIntent,
+            navigateToDetailsScreen = navigateToDetailsScreen
+        )
+    }
 }
 
 @Composable
