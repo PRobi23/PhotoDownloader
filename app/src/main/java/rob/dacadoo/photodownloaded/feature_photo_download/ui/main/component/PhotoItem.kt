@@ -1,6 +1,7 @@
 package rob.dacadoo.photodownloaded.feature_photo_download.ui.main.component
 
 import androidx.compose.foundation.border
+import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.fillMaxWidth
@@ -23,7 +24,11 @@ import coil3.util.DebugLogger
 import rob.dacadoo.photodownloaded.R
 
 @Composable
-fun PhotoItem(modifier: Modifier = Modifier, photoUrl: String) {
+fun PhotoItem(
+    modifier: Modifier = Modifier,
+    photoUrl: String,
+    navigateToDetailsScreen: (String) -> Unit
+) {
     Box(
         modifier = modifier
             .fillMaxWidth()
@@ -49,7 +54,10 @@ fun PhotoItem(modifier: Modifier = Modifier, photoUrl: String) {
                 contentScale = ContentScale.Crop,
                 modifier = Modifier
                     .width(150.dp)
-                    .height(250.dp),
+                    .height(250.dp)
+                    .clickable {
+                        navigateToDetailsScreen(photoUrl)
+                    },
             )
         }
     }

@@ -7,14 +7,13 @@ import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.padding
-import androidx.compose.foundation.lazy.LazyColumn
 import androidx.compose.foundation.lazy.grid.GridCells
 import androidx.compose.foundation.lazy.grid.LazyVerticalGrid
-import androidx.compose.foundation.lazy.items
 import androidx.compose.foundation.text.BasicTextField
 import androidx.compose.foundation.text.input.rememberTextFieldState
 import androidx.compose.material3.Button
 import androidx.compose.material3.CircularProgressIndicator
+import androidx.compose.material3.Scaffold
 import androidx.compose.material3.SnackbarHostState
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
@@ -36,31 +35,38 @@ import rob.dacadoo.photodownloaded.feature_photo_download.ui.main.component.Phot
 import rob.dacadoo.photodownloaded.ui.theme.PhotoDownloadedTheme
 
 @Composable
-fun MainScreenRoot(modifier: Modifier = Modifier) {
-    val mainViewModel: MainViewModel = hiltViewModel()
-    val uiState by mainViewModel.uiState.collectAsStateWithLifecycle()
-    val snackbarHostState = remember { SnackbarHostState() }
+fun MainScreenRoot(
+    modifier: Modifier = Modifier,
+    navigateToDetailsScreen: (String) -> Unit
+) {
+    Scaffold { contentPadding ->
+        val mainViewModel: MainViewModel = hiltViewModel()
+        val uiState by mainViewModel.uiState.collectAsStateWithLifecycle()
+        val snackbarHostState = remember { SnackbarHostState() }
 
-    ObserveUiEvents(
-        uiEvents = mainViewModel.uiEvent,
-        snackbarHostState = snackbarHostState,
-        setUiEventState = { uiEvent ->
-            mainViewModel.handleIntent(MainViewModelIntent.SetUiEventState(uiEvent))
-        },
-    )
+        ObserveUiEvents(
+            uiEvents = mainViewModel.uiEvent,
+            snackbarHostState = snackbarHostState,
+            setUiEventState = { uiEvent ->
+                mainViewModel.handleIntent(MainViewModelIntent.SetUiEventState(uiEvent))
+            },
+        )
 
-    MainScreen(
-        modifier = modifier,
-        uiState = uiState,
-        handleIntent = mainViewModel::handleIntent
-    )
+        MainScreen(
+            modifier = modifier.padding(contentPadding),
+            uiState = uiState,
+            handleIntent = mainViewModel::handleIntent,
+            navigateToDetailsScreen = navigateToDetailsScreen
+        )
+    }
 }
 
 @Composable
 fun MainScreen(
     modifier: Modifier = Modifier,
     uiState: MainState,
-    handleIntent: (MainViewModelIntent) -> Unit
+    handleIntent: (MainViewModelIntent) -> Unit,
+    navigateToDetailsScreen: (String) -> Unit
 ) {
     Column(
         modifier = Modifier.fillMaxSize(),
@@ -100,7 +106,10 @@ fun MainScreen(
                     modifier = Modifier.fillMaxSize()
                 ) {
                     items(count = photos.size) { index ->
-                        PhotoItem(photoUrl = photos[index].photoUrl)
+                        PhotoItem(
+                            photoUrl = photos[index].photoUrl,
+                            navigateToDetailsScreen = navigateToDetailsScreen
+                        )
                     }
                 }
             }
@@ -117,7 +126,8 @@ private fun MainScreenPreview() {
     PhotoDownloadedTheme {
         MainScreen(
             uiState = MainState(),
-            handleIntent = {}
+            handleIntent = {},
+            navigateToDetailsScreen = {}
         )
     }
 }
@@ -128,7 +138,8 @@ private fun MainScreenLoadingPreview() {
     PhotoDownloadedTheme {
         MainScreen(
             uiState = MainState(isLoading = true),
-            handleIntent = {}
+            handleIntent = {},
+            navigateToDetailsScreen = {}
         )
     }
 }

@@ -1,14 +1,12 @@
 package rob.dacadoo.photodownloaded.navigation
 
 import androidx.compose.runtime.Composable
-import androidx.navigation.NavGraphBuilder
 import androidx.navigation.NavHostController
 import androidx.navigation.compose.NavHost
 import androidx.navigation.compose.composable
-import androidx.navigation.navigation
+import androidx.navigation.toRoute
+import rob.dacadoo.photodownloaded.feature_photo_download.ui.detail.PhotoDetailScreen
 import rob.dacadoo.photodownloaded.feature_photo_download.ui.main.MainScreenRoot
-import rob.dacadoo.photodownloaded.navigation.NavigationNames.MAIN_SCREEN_NAME
-import rob.dacadoo.photodownloaded.navigation.NavigationNames.PHOTO_ROUTE_NAME
 
 @Composable
 fun NavigationRoot(
@@ -16,19 +14,21 @@ fun NavigationRoot(
 ) {
     NavHost(
         navController = navController,
-        startDestination = PHOTO_ROUTE_NAME
+        startDestination = Route.MainScreen
     ) {
-        photoGraph(navController)
-    }
-}
+        composable<Route.MainScreen> {
+            MainScreenRoot(
+                navigateToDetailsScreen = { photoUrl ->
+                    navController.navigate(Route.DetailsScreen(photoUrl))
+                }
+            )
+        }
+        composable<Route.DetailsScreen> {
+            val args = it.toRoute<Route.DetailsScreen>()
 
-private fun NavGraphBuilder.photoGraph(navController: NavHostController) {
-    navigation(
-        startDestination = MAIN_SCREEN_NAME,
-        route = PHOTO_ROUTE_NAME
-    ) {
-        composable(route = MAIN_SCREEN_NAME) {
-            MainScreenRoot()
+            PhotoDetailScreen(
+                photoUrl = args.photoUrl
+            )
         }
     }
 }
