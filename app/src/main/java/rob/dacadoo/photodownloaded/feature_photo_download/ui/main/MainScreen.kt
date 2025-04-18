@@ -39,26 +39,24 @@ fun MainScreenRoot(
     modifier: Modifier = Modifier,
     navigateToDetailsScreen: (String) -> Unit
 ) {
-    Scaffold { contentPadding ->
-        val mainViewModel: MainViewModel = hiltViewModel()
-        val uiState by mainViewModel.uiState.collectAsStateWithLifecycle()
-        val snackbarHostState = remember { SnackbarHostState() }
+    val mainViewModel: MainViewModel = hiltViewModel()
+    val uiState by mainViewModel.uiState.collectAsStateWithLifecycle()
+    val snackbarHostState = remember { SnackbarHostState() }
 
-        ObserveUiEvents(
-            uiEvents = mainViewModel.uiEvent,
-            snackbarHostState = snackbarHostState,
-            setUiEventState = { uiEvent ->
-                mainViewModel.handleIntent(MainViewModelIntent.SetUiEventState(uiEvent))
-            },
-        )
+    ObserveUiEvents(
+        uiEvents = mainViewModel.uiEvent,
+        snackbarHostState = snackbarHostState,
+        setUiEventState = { uiEvent ->
+            mainViewModel.handleIntent(MainViewModelIntent.SetUiEventState(uiEvent))
+        },
+    )
 
-        MainScreen(
-            modifier = modifier.padding(contentPadding),
-            uiState = uiState,
-            handleIntent = mainViewModel::handleIntent,
-            navigateToDetailsScreen = navigateToDetailsScreen
-        )
-    }
+    MainScreen(
+        modifier = modifier,
+        uiState = uiState,
+        handleIntent = mainViewModel::handleIntent,
+        navigateToDetailsScreen = navigateToDetailsScreen
+    )
 }
 
 @Composable
